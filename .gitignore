@@ -6,7 +6,7 @@
 docker-compose.yml
 
 # this file is generated at setup time from a template
-mariadb_init/init.sql
+mariadb-init/init.sql
 
 # these directories are generated at setup time
 certs/
