@@ -1,0 +1,65 @@
+worker_processes 1;
+
+events { worker_connections 1024; }
+
+http {
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    server {
+        listen 80;
+        server_name ${SITE_URL};
+
+        # Redirect all HTTP requests to HTTPS
+        location / {
+            return 301 https://${SITE_URL}$request_uri;
+        }
+    }
+
+    server {
+        listen 443 ssl;
+        server_name ${SITE_URL};
+
+        ssl_certificate ${SSL_CERT};
+        ssl_certificate_key ${SSL_CERT_KEY};
+
+        root /var/www/html;
+        index index.php index.html;
+
+        location / {
+            try_files $uri $uri/ /index.php?$args;
+            proxy_pass http://wordpress:80;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /phpmyadmin/ {
+            proxy_pass http://phpmyadmin:80/;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location ~ \.php$ {
+            try_files $uri =404;
+            proxy_pass http://wordpress:80;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location ~ /\.ht {
+            deny all;
+        }
+    }
+}

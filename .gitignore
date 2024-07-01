@@ -1,4 +1,5 @@
 
-
 .env
+certs/
+wordpress_data/
 
