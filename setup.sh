@@ -61,11 +61,14 @@ remove_self_signed_cert_from_trusted() {
   esac
 }
 
-# Function to ensure correct permissions for wordpress_data directory
+# Function to ensure correct permissions for wordpress_data & mariadb_data directory
 ensure_permissions() {
   echo "Ensuring correct permissions for wordpress_data directory..."
   sudo chown -R www-data:www-data wordpress_data
   sudo chmod -R 755 wordpress_data
+
+  echo "Ensuring correct permissions for mariadb_data directory..."
+  sudo chmod -R 755 mariadb_data
 }
 
 # Function to clean up resources in case of failure
@@ -97,6 +100,9 @@ mkdir -p certs
 
 # Create wordpress_data directory if it doesn't exist
 mkdir -p wordpress_data
+
+# Create mariadb_data directory if it doesn't exist
+mkdir -p mariadb_data
 
 # Ensure correct permissions for wordpress_data directory
 ensure_permissions

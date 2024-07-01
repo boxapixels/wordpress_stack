@@ -69,4 +69,18 @@ if [ -f mariadb-init/init.sql ]; then
   rm mariadb-init/init.sql
 fi
 
+# Optionally remove wordpress_data directory
+read -p "Do you want to remove the wordpress_data directory? (y/N): " REMOVE_WORDPRESS_DATA
+if [ "$REMOVE_WORDPRESS_DATA" = "y" ] || [ "$REMOVE_WORDPRESS_DATA" = "Y" ]; then
+  echo "Removing wordpress_data directory..."
+  rm -rf wordpress_data
+fi
+
+# Optionally remove mariadb_data directory
+read -p "Do you want to remove the mariadb_data directory? (y/N): " REMOVE_MARIADB_DATA
+if [ "$REMOVE_MARIADB_DATA" = "y" ] || [ "$REMOVE_MARIADB_DATA" = "Y" ]; then
+  echo "Removing mariadb_data directory..."
+  rm -rf mariadb_data
+fi
+
 echo "Cleanup complete."
