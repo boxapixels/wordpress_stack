@@ -33,6 +33,10 @@ remove_self_signed_cert_from_trusted() {
 }
 
 # Prompt for confirmation
+echo "!!!!!!!!! DANGER !!!!!!!!!!"
+echo "This script will stop and remove all Docker containers, volumes, and networks for $APP_NAME."
+echo "It will also remove any self-signed SSL certificates from the trusted store and any instance-specific initialization scripts."
+echo " "
 read -p "Are you sure you want to stop and remove all containers, volumes, and networks for $APP_NAME? (y/N): " CONFIRM
 
 if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
@@ -51,7 +55,14 @@ docker volume rm ${APP_NAME}_mariadb_data
 
 # Remove Docker network
 echo "Removing Docker network..."
-docker network rm ${APP_NAME}_wp_network
+docker network rm ${APP_NAME}_network
+
+# remove the docker-compose.yml file
+if [ -f docker-compose.yml ]; then
+  echo "Removing docker-compose.yml file..."
+  rm docker-compose.yml
+fi
+
 
 # Optionally, remove the certs directory if you want to clean up certificates
 read -p "Do you want to remove the certs directory? (y/N): " REMOVE_CERTS
@@ -73,14 +84,14 @@ fi
 read -p "Do you want to remove the wordpress_data directory? (y/N): " REMOVE_WORDPRESS_DATA
 if [ "$REMOVE_WORDPRESS_DATA" = "y" ] || [ "$REMOVE_WORDPRESS_DATA" = "Y" ]; then
   echo "Removing wordpress_data directory..."
-  rm -rf wordpress_data
+  rm -rf ${APP_NAME}_wordpress_data
 fi
 
 # Optionally remove mariadb_data directory
 read -p "Do you want to remove the mariadb_data directory? (y/N): " REMOVE_MARIADB_DATA
 if [ "$REMOVE_MARIADB_DATA" = "y" ] || [ "$REMOVE_MARIADB_DATA" = "Y" ]; then
   echo "Removing mariadb_data directory..."
-  rm -rf mariadb_data
+  rm -rf ${APP_NAME}_mariadb_data
 fi
 
 echo "Cleanup complete."

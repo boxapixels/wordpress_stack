@@ -64,11 +64,11 @@ remove_self_signed_cert_from_trusted() {
 # Function to ensure correct permissions for wordpress_data & mariadb_data directory
 ensure_permissions() {
   echo "Ensuring correct permissions for wordpress_data directory..."
-  sudo chown -R www-data:www-data wordpress_data
-  sudo chmod -R 755 wordpress_data
+  sudo chown -R www-data:www-data ${APP_NAME}_wordpress_data
+  sudo chmod -R 755 ${APP_NAME}_wordpress_data
 
   echo "Ensuring correct permissions for mariadb_data directory..."
-  sudo chmod -R 755 mariadb_data
+  sudo chmod -R 755 ${APP_NAME}_mariadb_data
 }
 
 # Function to clean up resources in case of failure
@@ -98,11 +98,16 @@ fi
 # Create certs directory if it doesn't exist
 mkdir -p certs
 
+# generate the docker-compose.yml file from the template file
+# replace the variables in the template file with the values from the .env file
+# this is done because compose files do not support variable substitution on keys, only values.
+sed "s/@@APP_NAME@@/${APP_NAME}/g" docker-compose.template.yml > docker-compose.yml
+
 # Create wordpress_data directory if it doesn't exist
-mkdir -p wordpress_data
+mkdir -p ${APP_NAME}_wordpress_data
 
 # Create mariadb_data directory if it doesn't exist
-mkdir -p mariadb_data
+mkdir -p ${APP_NAME}_mariadb_data
 
 # Ensure correct permissions for wordpress_data directory
 ensure_permissions

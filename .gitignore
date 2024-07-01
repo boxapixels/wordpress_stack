@@ -1,8 +1,17 @@
 
+# site specific configuration
 .env
 
+# this file is generated at setup time from a template
+docker-compose.yml
+
+# this file is generated at setup time from a template
 mariadb_init/init.sql
 
+# these directories are generated at setup time
 certs/
-wordpress_data/
-mariadb_data/
+
+*_wordpress_data/
+
+*_mariadb_data/
+
