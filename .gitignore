@@ -2,4 +2,4 @@
 .env
 certs/
 wordpress_data/
-
+mariadb_data/

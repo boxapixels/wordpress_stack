@@ -130,9 +130,9 @@ esac
 
 # Generate instance-specific SQL initialization script
 cp mariadb-init/init.sql.template mariadb-init/init.sql
-sed -i "s/\${MYSQL_DATABASE}/$MYSQL_DATABASE/g" mariadb-init/init.sql
-sed -i "s/\${MYSQL_USER}/$MYSQL_USER/g" mariadb-init/init.sql
-sed -i "s/\${MYSQL_PASSWORD}/$MYSQL_PASSWORD/g" mariadb-init/init.sql
+sed -i "" "s/\${MYSQL_DATABASE}/$MYSQL_DATABASE/g" mariadb-init/init.sql
+sed -i "" "s/\${MYSQL_USER}/$MYSQL_USER/g" mariadb-init/init.sql
+sed -i "" "s/\${MYSQL_PASSWORD}/$MYSQL_PASSWORD/g" mariadb-init/init.sql
 
 # Ensure entrypoint.sh is executable
 chmod +x nginx/entrypoint.sh
