@@ -1,5 +1,8 @@
 
 .env
+
+mariadb_init/init.sql
+
 certs/
 wordpress_data/
 mariadb_data/
